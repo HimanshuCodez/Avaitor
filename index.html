@@ -1,13 +1,449 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1e3c72 0%, #2a5298 50%, #0f0f23 100%);
+        }
+
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50px, -50px); }
+        }
+
+        .plane {
+            position: absolute;
+            bottom: 100px;
+            left: 50px;
+            width: 80px;
+            height: 60px;
+            transition: all 0.1s ease-out;
+            z-index: 10;
+        }
+
+        .plane-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .plane-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px #ff4757) drop-shadow(0 0 30px #ff6b7a);
+        }
+
+
+
+        .trail {
+            position: absolute;
+            bottom: 115px;
+            left: 20px;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff4757, #ff6b7a, transparent);
+            z-index: 5;
+            transition: all 0.1s ease-out;
+        }
+
+        .multiplier {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 20px #ff4757, 0 0 40px #ff4757;
+            z-index: 15;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .multiplier.show {
+            opacity: 1;
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .stats {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 16px;
+            z-index: 20;
+        }
+
+        .status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 20;
+        }
+
+        .crashed {
+            color: #ff4757;
+            animation: flashRed 0.5s ease-in-out 3;
+        }
+
+        @keyframes flashRed {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .explosion {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4757 0%, #ff6b7a 30%, transparent 70%);
+            animation: explode 0.8s ease-out;
+            z-index: 12;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="background"></div>
+        <div class="grid-lines"></div>
+        
+        <div class="trail" id="trail"></div>
+        
+        <div class="plane" id="plane">
+            <div class="plane-body">
+                <!-- Side profile aircraft matching reference image -->
+                <svg class="plane-svg" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main fuselage (side profile) -->
+                    <path d="M8 28 Q15 25 25 26 L55 27 Q65 27 70 28 Q72 29 72 30 Q72 31 70 32 Q65 33 55 33 L25 34 Q15 35 8 32 Q6 30 8 28" fill="#ff4757"/>
+                    
+                    <!-- Cockpit windows (side view) -->
+                    <path d="M45 27 Q52 26 58 27 Q60 28 60 30 Q60 32 58 33 Q52 34 45 33 Q43 30 45 27" fill="#ff6b7a"/>
+                    <path d="M47 28 Q52 27 56 28 Q57 29 57 30 Q57 31 56 32 Q52 33 47 32 Q46 30 47 28" fill="rgba(255,255,255,0.4)"/>
+                    
+                    <!-- Main wing (high wing configuration) -->
+                    <path d="M25 27 L20 15 Q18 12 20 10 L45 12 Q48 13 48 16 L46 27 Q35 28 25 27" fill="#ff4757"/>
+                    
+                    <!-- Wing strut -->
+                    <path d="M30 27 L28 20 L32 19 L34 26" fill="#c44569"/>
+                    
+                    <!-- Tail assembly -->
+                    <path d="M8 30 L4 29 Q2 30 4 31 L8 30" fill="#ff4757"/>
+                    
+                    <!-- Vertical stabilizer -->
+                    <path d="M4 30 L2 20 Q3 18 5 20 L8 28 Q6 30 4 30" fill="#ff4757"/>
+                    
+                    <!-- Horizontal stabilizer -->
+                    <path d="M4 30 L1 28 Q0 29 1 30 Q0 31 1 32 L4 30" fill="#c44569"/>
+                    
+                    <!-- Propeller spinner -->
+                    <ellipse cx="72" cy="30" rx="2" ry="1.5" fill="#2c2c54"/>
+                    
+                    <!-- Animated propeller blades -->
+                    <g>
+                        <path d="M74 30 L79 25 L79 35 Z" fill="rgba(200,200,200,0.6)" opacity="0.8">
+                            <animateTransform 
+                                attributeName="transform" 
+                                type="rotate" 
+                                values="0 72 30;120 72 30;240 72 30;360 72 30"
+                                dur="0.08s" 
+                                repeatCount="indefinite"/>
+                        </path>
+                        <path d="M74 30 L79 25 L79 35 Z" fill="rgba(200,200,200,0.4)" opacity="0.6">
+                            <animateTransform 
+                                attributeName="transform" 
+                                type="rotate" 
+                                values="120 72 30;240 72 30;360 72 30;120 72 30"
+                                dur="0.08s" 
+                                repeatCount="indefinite"/>
+                        </path>
+                        <path d="M74 30 L79 25 L79 35 Z" fill="rgba(200,200,200,0.3)" opacity="0.4">
+                            <animateTransform 
+                                attributeName="transform" 
+                                type="rotate" 
+                                values="240 72 30;360 72 30;120 72 30;240 72 30"
+                                dur="0.08s" 
+                                repeatCount="indefinite"/>
+                        </path>
+                    </g>
+                    
+                    <!-- Landing gear -->
+                    <rect x="35" y="34" width="1.5" height="6" fill="#2c2c54"/>
+                    <ellipse cx="35.5" cy="41" rx="2" ry="1" fill="#333"/>
+                    
+                    <rect x="52" y="34" width="1.5" height="4" fill="#2c2c54"/>
+                    <ellipse cx="52.5" cy="39" rx="1.5" ry="0.8" fill="#333"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="multiplier" id="multiplier">1.00x</div>
+        
+        <div class="stats">
+            <div>Distance: <span id="distance">0</span>m</div>
+            <div>Best: <span id="best">0.00x</span></div>
+        </div>
+        
+        <div class="status" id="status">Ready to Fly</div>
+        
+        <div class="controls">
+            <button class="btn" id="startBtn" onclick="startFlight()">Take Off</button>
+        </div>
+    </div>
+
+    <script>
+        let isFlying = false;
+        let crashed = false;
+        let multiplier = 1.00;
+        let distance = 0;
+        let bestMultiplier = 0;
+        let animationId;
+        let planeX = 50;
+        let planeY = 100;
+        let speed = 1;
+        let crashTime = Math.random() * 8000 + 3000; // Random crash between 3-11 seconds
+
+        const plane = document.getElementById('plane');
+        const trail = document.getElementById('trail');
+        const multiplierEl = document.getElementById('multiplier');
+        const distanceEl = document.getElementById('distance');
+        const bestEl = document.getElementById('best');
+        const statusEl = document.getElementById('status');
+        const startBtn = document.getElementById('startBtn');
+
+        function startFlight() {
+            if (isFlying) {
+                cashOut();
+                return;
+            }
+
+            isFlying = true;
+            crashed = false;
+            multiplier = 1.00;
+            distance = 0;
+            planeX = 50;
+            planeY = 100;
+            speed = 1;
+            crashTime = Math.random() * 8000 + 3000;
+
+            startBtn.textContent = 'Cash Out';
+            statusEl.textContent = 'Flying...';
+            statusEl.classList.remove('crashed');
+            multiplierEl.classList.add('show');
+
+            // Clear any existing explosion
+            const existingExplosion = document.querySelector('.explosion');
+            if (existingExplosion) {
+                existingExplosion.remove();
+            }
+
+            animate();
+            
+            // Auto crash after random time
+            setTimeout(() => {
+                if (isFlying && !crashed) {
+                    crash();
+                }
+            }, crashTime);
+        }
+
+        function cashOut() {
+            if (!isFlying || crashed) return;
+            
+            isFlying = false;
+            if (multiplier > bestMultiplier) {
+                bestMultiplier = multiplier;
+                bestEl.textContent = multiplier.toFixed(2) + 'x';
+            }
+            
+            startBtn.textContent = 'Take Off';
+            statusEl.textContent = `Cashed out at ${multiplier.toFixed(2)}x`;
+            multiplierEl.classList.remove('show');
+            
+            cancelAnimationFrame(animationId);
+            resetPlane();
+        }
+
+        function crash() {
+            if (crashed || !isFlying) return;
+            
+            crashed = true;
+            isFlying = false;
+            
+            // Create explosion effect
+            const explosion = document.createElement('div');
+            explosion.className = 'explosion';
+            explosion.style.left = (planeX - 50) + 'px';
+            explosion.style.bottom = (planeY - 50) + 'px';
+            document.querySelector('.game-container').appendChild(explosion);
+            
+            setTimeout(() => explosion.remove(), 800);
+            
+            startBtn.textContent = 'Take Off';
+            statusEl.textContent = 'Crashed!';
+            statusEl.classList.add('crashed');
+            multiplierEl.classList.remove('show');
+            
+            cancelAnimationFrame(animationId);
+            
+            setTimeout(() => {
+                resetPlane();
+                statusEl.classList.remove('crashed');
+                statusEl.textContent = 'Ready to Fly';
+            }, 2000);
+        }
+
+        function resetPlane() {
+            planeX = 50;
+            planeY = 100;
+            plane.style.left = planeX + 'px';
+            plane.style.bottom = planeY + 'px';
+            plane.style.transform = 'rotate(0deg)';
+            trail.style.width = '0px';
+        }
+
+        function animate() {
+            if (!isFlying || crashed) return;
+            
+            // Update multiplier and distance
+            multiplier += 0.01;
+            distance += speed;
+            
+            // Update plane position
+            planeX += speed * 1.5;
+            planeY += speed * 0.8;
+            speed += 0.02;
+            
+            // Update trail
+            const trailWidth = Math.min(planeX, 200);
+            trail.style.width = trailWidth + 'px';
+            trail.style.left = (planeX - trailWidth + 20) + 'px';
+            trail.style.bottom = (planeY + 15) + 'px';
+            
+            // Update plane rotation based on climb
+            const rotation = Math.min(Math.atan(speed * 0.8 / (speed * 1.5)) * 180 / Math.PI, 30);
+            
+            // Update display
+            plane.style.left = planeX + 'px';
+            plane.style.bottom = planeY + 'px';
+            plane.style.transform = `rotate(-${rotation}deg)`;
+            
+            multiplierEl.textContent = multiplier.toFixed(2) + 'x';
+            distanceEl.textContent = Math.floor(distance);
+            
+            // Reset position if plane goes off screen
+            if (planeX > window.innerWidth + 100) {
+                planeX = -100;
+            }
+            if (planeY > window.innerHeight + 100) {
+                planeY = -100;
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Initialize
+        resetPlane();
+    </script>
+</body>
 </html>
