@@ -55,10 +55,11 @@ const AviatorsGame = () => {
 
           <h1 className="text-4xl font-light mb-2 tracking-wide">Aviators Game</h1>
           <p className="text-gray-300 mb-8 text-lg">Ready to take flight?</p>
-
+<Link to="/game">
           <button className="bg-red-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
             Play Now
           </button>
+          </Link>
         </main>
 
         {/* Bottom Badges */}

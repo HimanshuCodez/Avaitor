@@ -5,6 +5,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import AviatorsGame from './Pages/Home';
 import AviatorWithdrawal from './Pages/Withdraw';
+import AviatorLayout from './Pages/Game';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/withdraw" element={<AviatorWithdrawal/>} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/game" element={<AviatorLayout />} />
       </Routes>
     </div>
   );
