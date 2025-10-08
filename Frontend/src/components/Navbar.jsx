@@ -41,13 +41,13 @@ const Navbar = () => {
         
         {isMenuOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
-            <div className="md:hidden px-4 py-2 text-sm text-gray-700">
+            <div className="px-4 py-2 text-sm text-gray-700">
               Balance: {balance}
             </div>
-            <div className="md:hidden px-4 py-2 text-sm text-gray-700">
+            <div className="px-4 py-2 text-sm text-gray-700">
               Winning: {wagering}
             </div>
-            <div className="md:hidden border-t border-gray-200 my-1"></div>
+            <div className="border-t border-gray-200 my-1"></div>
             <Link 
               to="/withdraw" 
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
