@@ -23,7 +23,7 @@ const AddCash = () => {
               <div className="bg-white bg-opacity-10 rounded-lg py-4 px-6">
                 <label htmlFor="amount" className="block text-left text-gray-300 mb-2">Amount to Add</label>
                 <div className="flex items-center">
-                  <span className="text-2xl font-semibold text-gray-400 mr-2">$</span>
+                  <span className="text-2xl font-semibold text-gray-400 mr-2">₹</span>
                   <input
                     type="text"
                     id="amount"

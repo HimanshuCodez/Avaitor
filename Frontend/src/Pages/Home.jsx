@@ -12,8 +12,7 @@ const AviatorsGame = () => {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* ✅ Overlay for dark effect */}
-      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+    
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
