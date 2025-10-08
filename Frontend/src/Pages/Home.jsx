@@ -1,16 +1,13 @@
-import React, { useState } from "react";
-import { Menu, Shield, Award } from "lucide-react";
+import React from "react";
+import { Shield, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AviatorsGame = () => {
-  const [balance] = useState("10000");
-  const [wagering] = useState("5000");
-
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
       {/* ✅ Fullscreen Background Image */}
       <img
-        src="avitor.jpg"
+        src="/avitor.jpg"
         alt="Game Background"
         className="absolute inset-0 w-full h-full object-cover"
       />
@@ -20,32 +17,6 @@ const AviatorsGame = () => {
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Header */}
-        <header className="bg-red-600 bg-opacity-90 px-5 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold">Mostbet</div>
-
-          <div className="flex items-center gap-5">
-            <div className="flex items-center gap-2 text-sm">
-              <span>Balance:</span>
-              <span className="bg-white bg-opacity-20 px-3 py-1 rounded font-semibold">
-                {balance}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 text-sm">
-              <Link to="/withdraw">
-              <span className="cursor-pointer">Winning Amount:</span></Link>
-              <span className="bg-white bg-opacity-20 px-3 py-1 rounded font-semibold">
-                {wagering}
-              </span>
-            </div>
-          </div>
-
-          <button className="p-2 hover:bg-white hover:bg-opacity-10 rounded">
-            <Menu size={24} />
-          </button>
-        </header>
-
         {/* Centered Content */}
         <main className="flex-1 flex flex-col items-center justify-center px-8 py-12 text-center">
           <div className="text-red-500 text-6xl font-bold mb-4 transform -skew-x-12">
@@ -55,10 +26,10 @@ const AviatorsGame = () => {
 
           <h1 className="text-4xl font-light mb-2 tracking-wide">Aviators Game</h1>
           <p className="text-gray-300 mb-8 text-lg">Ready to take flight?</p>
-<Link to="/game">
-          <button className="bg-red-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
-            Play Now
-          </button>
+          <Link to="/game">
+            <button className="bg-red-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
+              Play Now
+            </button>
           </Link>
         </main>
 

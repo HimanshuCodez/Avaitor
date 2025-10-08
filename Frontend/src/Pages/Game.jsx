@@ -100,7 +100,7 @@ const AviatorLayout = () => {
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-400 to-blue-500 border-2 border-gray-800"></div>
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-gray-800"></div>
               </div>
-              <span className="font-semibold">128</span>
+             
             </div>
           </div>
 
