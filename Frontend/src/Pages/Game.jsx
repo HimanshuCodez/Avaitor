@@ -7,7 +7,11 @@ const AviatorLayout = () => {
   const [isBetsVisible, setIsBetsVisible] = useState(false);
 
   const handleBet = () => {
+    const videos = ['vidone.mp4', 'vid2.mp4'];
     if (videoRef.current) {
+      const randomIndex = Math.floor(Math.random() * videos.length);
+      const randomVideo = videos[randomIndex];
+      videoRef.current.src = randomVideo;
       videoRef.current.play();
     }
   };
@@ -95,13 +99,7 @@ const AviatorLayout = () => {
               controls={false} 
             />
 
-            <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-black/50 px-3 py-2 rounded-lg">
-              <div className="flex -space-x-2">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-400 to-blue-500 border-2 border-gray-800"></div>
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-gray-800"></div>
-              </div>
-             
-            </div>
+            
           </div>
 
           {/* Betting Controls */}

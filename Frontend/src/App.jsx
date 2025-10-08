@@ -11,7 +11,7 @@ import AddCash from './Pages/AddCash';
 function App() {
   return (
     <div>
-      <Navbar />
+
       <Routes>
         <Route path="/" element={<AviatorsGame />} />
         <Route path="/screen" element={<AviatorsGame />} />
