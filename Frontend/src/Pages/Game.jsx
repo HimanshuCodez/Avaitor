@@ -7,7 +7,7 @@ const AviatorLayout = () => {
   const [isBetsVisible, setIsBetsVisible] = useState(false);
 
   const handleBet = () => {
-    const videos = ['vidone.mp4', 'vid2.mp4','vid3.mp4', 'vid4.mp4', 'vid5.mp4', 'vid6.mp4','vid7.mp4'];
+    const videos = ['vidone.mp4', 'vid2.mp4','vid3.mp4', 'vid4.mp4', 'vid5.mp4', 'vid6.mp4','vid7.mp4', 'vid8.mp4', 'vid9.mp4', 'vid10.mp4'];
     if (videoRef.current) {
       const randomIndex = Math.floor(Math.random() * videos.length);
       const randomVideo = videos[randomIndex];
