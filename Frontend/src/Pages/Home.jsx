@@ -32,7 +32,7 @@ const AviatorsGame = () => {
          
           </Link>
             <Link to="/prediction">
-             <button className="bg-red-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
+             <button className="bg-blue-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
               Play Now Colour Prediction
             </button>
             </Link>
