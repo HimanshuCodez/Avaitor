@@ -17,7 +17,7 @@ const AviatorsGame = () => {
       {/* Main Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Centered Content */}
-        <main className="flex-1 flex flex-col items-center justify-center px-8 py-12 text-center">
+        <main className="flex-1 flex flex-col items-center justify-center px-8 py-12 text-center gap-4">
           <div className="text-red-500 text-6xl font-bold mb-4 transform -skew-x-12">
             Aviator
           </div>
@@ -25,11 +25,17 @@ const AviatorsGame = () => {
 
           <h1 className="text-4xl font-light mb-2 tracking-wide">Aviators Game</h1>
           <p className="text-gray-300 mb-8 text-lg">Ready to take flight?</p>
-          <Link to="/game">
+            <Link to="/game">
             <button className="bg-red-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
-              Play Now
+              Play Now Aviator
             </button>
+         
           </Link>
+            <Link to="/prediction">
+             <button className="bg-red-600 hover:bg-red-700 px-12 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl">
+              Play Now Colour Prediction
+            </button>
+            </Link>
         </main>
 
         {/* Bottom Badges */}
