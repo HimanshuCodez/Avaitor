@@ -3,7 +3,7 @@ import { Crown } from 'lucide-react';
 
 const generateRandomPlayers = (count) => {
   const players = [];
-  const names = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi", "Ivan", "Judy"];
+  const names = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi", "Ivan", "Judy", "Kevin", "Liam", "Mia", "Noah", "Olivia", "Peter", "Quinn", "Rachel", "Sam", "Tina", "Uma", "Victor", "Wendy", "Xavier", "Yara", "Zoe"];
   for (let i = 0; i < count; i++) {
     players.push({
       id: i,
