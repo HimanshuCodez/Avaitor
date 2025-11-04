@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Wallet, Gift, Clock, Users, TrendingUp, Volume2, User } from 'lucide-react';
+import Leaderboard from './Leaderboard';
 
 export default function ColorPredictionGame() {
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(1000);
   const [selectedAmount, setSelectedAmount] = useState(10);
   const [selectedColor, setSelectedColor] = useState(null);
   const [timer, setTimer] = useState(180);
@@ -48,15 +49,21 @@ export default function ColorPredictionGame() {
     return 'bg-red-500';
   };
 
+  const getColorBadge = (color) => {
+    if (color === 'Green') return 'bg-green-500';
+    if (color === 'Violet') return 'bg-purple-500';
+    return 'bg-red-500';
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white pb-24">
       {/* Header */}
       <div className="bg-gradient-to-r from-red-600 to-red-500 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ef4444'/%3E%3Ctext x='50' y='60' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EOK%3C/text%3E%3C/svg%3E" alt="OK Win" className="w-8 h-8" />
           </div>
-          <span className="text-xl font-bold">MostBet Colour Prediction</span>
+          <span className="text-xl font-bold">OK.Win</span>
         </div>
         <div className="flex items-center gap-3">
           <Volume2 className="w-6 h-6" />
@@ -79,7 +86,7 @@ export default function ColorPredictionGame() {
         <div className="flex items-center gap-2">
           <Volume2 className="w-5 h-5 text-orange-600" />
           <p className="text-orange-800 text-sm">
-            Safeguard against scams. Crimes beyond site made only through our official Mostbet
+            Safeguard against scams. Crimes beyond site made only through our official OK.Win
           </p>
         </div>
         <button className="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
@@ -166,7 +173,9 @@ export default function ColorPredictionGame() {
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
               <button
                 key={num}
-                className={`${getColorClass(num)} w-full aspect-square rounded-full font-bold text-2xl shadow-lg hover:scale-105 transform transition flex items-center justify-center border-4 border-white`}
+                className={`${getColorClass(num)} w-full aspect-square rounded-full font-bold text-2xl hover:scale-105 transform transition flex items-center justify-center border-4 border-white
+  shadow-[0_0_0_2px_rgba(255,255,255,0.5),inset_0_0_10px_rgba(255,255,255,0.3),inset_0_0_20px_rgba(0,0,0,0.2)]
+}`}
               >
                 {num}
               </button>
@@ -198,17 +207,26 @@ export default function ColorPredictionGame() {
 
       {/* History */}
       <div className="mx-4 mb-6">
-        <h3 className="text-lg font-bold mb-3">Recent Results</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-bold">Recent Results</h3>
+        </div>
         <div className="flex gap-2 overflow-x-auto pb-2">
           {history.map((num, idx) => (
             <div
               key={idx}
-              className={`${getColorClass(num)} min-w-[3rem] h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-4 border-white`}
+              className={`${getColorClass(num)} min-w-[3rem] h-12 rounded-full flex items-center justify-center font-bold text-xl border-4 border-white
+  shadow-[0_0_0_1px_rgba(255,255,255,0.4),inset_0_0_8px_rgba(255,255,255,0.2),inset_0_0_15px_rgba(0,0,0,0.15)]
+}`}
             >
               {num}
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Leaderboard Section */}
+      <div className="mx-4 mb-6">
+        <Leaderboard />
       </div>
 
       {/* Balance Bar */}

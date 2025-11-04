@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Menu } from 'lucide-react';
+import Leaderboard from '../components/Leaderboard';
 
 const AviatorLayout = () => {
   const [balance] = useState(5000.00);
@@ -69,30 +70,7 @@ const AviatorLayout = () => {
               Top
             </button>
           </div>
-          
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-blue-500 border-2 border-gray-800"></div>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-gray-800"></div>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 border-2 border-gray-800"></div>
-              </div>
-              <span className="text-xl font-bold">149/643</span>
-              <span className="text-gray-400">Bets</span>
-            </div>
-            <div className="bg-green-500 h-1 rounded-full" style={{width: '23%'}}></div>
-          </div>
-
-          <div className="text-center mb-2">
-            <div className="text-2xl font-bold">1,169,416.26</div>
-            <div className="text-gray-400 text-sm">Total win INR</div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 text-xs text-gray-400 mb-2">
-            <div>Player</div>
-            <div className="text-center">Bet INR</div>
-            <div className="text-right">Win INR</div>
-          </div>
+          <Leaderboard />
         </aside>
 
         {/* Main Game Area */}
