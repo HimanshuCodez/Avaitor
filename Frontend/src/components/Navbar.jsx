@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Menu, User } from 'lucide-react';
 
 const Navbar = () => {
-  const [balance] = useState("100.00"); // Mock data
-  const [wagering] = useState("25.50"); // Mock data
+  const [balance] = useState("0"); // Mock data
+  const [wagering] = useState("0"); // Mock data
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Mock authentication state
 
