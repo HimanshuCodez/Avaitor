@@ -3,7 +3,7 @@ import { Shield, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AviatorWithdrawal = () => {
-  const [withdrawalAmount, setWithdrawalAmount] = useState("200");
+  const [withdrawalAmount, setWithdrawalAmount] = useState("0");
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
@@ -30,7 +30,7 @@ const AviatorWithdrawal = () => {
               <div className="bg-white bg-opacity-10 rounded-lg py-4 px-6">
                 <label htmlFor="amount" className="block text-left text-gray-300 mb-2">Amount to Withdraw</label>
                 <div className="flex items-center">
-                    <span className="text-2xl font-semibold text-gray-400 mr-2">$</span>
+                    <span className="text-2xl font-semibold text-gray-400 mr-2"></span>
                     <input 
                         type="text"
                         id="amount"
