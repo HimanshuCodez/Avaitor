@@ -28,7 +28,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/problem" element={<ServerProblemCard/>} />
         <Route path="/prediction" element={<ColorPredictionGame/>} />
-        <Route path="/game" element={<ProtectedRoute><AviatorLayout /></ProtectedRoute>} />
+        <Route path="/game" element={<AviatorLayout />} />
       </Routes>
     </div>
   );
