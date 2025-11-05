@@ -1,13 +1,22 @@
 import React, { useState, useRef } from 'react';
 import { Menu } from 'lucide-react';
 import Leaderboard from '../components/Leaderboard';
+import { Link } from 'react-router-dom';
 
 const AviatorLayout = () => {
-  const [balance] = useState(5000.00);
+  const [balance, setBalance] = useState(500);
   const videoRef = useRef(null);
   const [isBetsVisible, setIsBetsVisible] = useState(false);
+  const [showRechargeModal, setShowRechargeModal] = useState(false);
 
-  const handleBet = () => {
+  const handleBet = (betAmount) => {
+    if (balance < betAmount) {
+      setShowRechargeModal(true);
+      return;
+    }
+
+    setBalance(prev => prev - betAmount);
+
     const videos = ['vidone.mp4', 'vid2.mp4','vid3.mp4', 'vid4.mp4', 'vid5.mp4', 'vid6.mp4','vid7.mp4', 'vid8.mp4'];
     if (videoRef.current) {
       const currentSrc = videoRef.current.src;
@@ -88,7 +97,7 @@ const AviatorLayout = () => {
           </div>
 
           {/* Betting Controls */}
-          <BettingComponent handleBet={handleBet} />
+          <BettingComponent handleBet={handleBet} balance={balance} />
         </main>
       </div>
 
@@ -98,11 +107,27 @@ const AviatorLayout = () => {
         <span className="mx-2">|</span>
         <span>Powered by SPRIBE</span>
       </footer>
+
+      {/* Recharge Modal */}
+      {showRechargeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-xl text-center text-white w-80">
+            <p className="text-2xl font-bold mb-4">Insufficient Balance</p>
+            <p className="text-lg mb-4">Please recharge to continue playing.</p>
+<Link to={"/problem"}><button
+              onClick={() => setShowRechargeModal(false)} // This should ideally navigate to a recharge page
+              className="bg-green-500 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transform transition"
+            >
+              Recharge
+            </button></Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const BettingComponent = ({ handleBet }) => {
+const BettingComponent = ({ handleBet, balance }) => {
   const [bet1, setBet1] = useState(10.00);
   const [bet2, setBet2] = useState(10.00);
   const [activeTab1, setActiveTab1] = useState('Bet');
@@ -174,7 +199,7 @@ const BettingComponent = ({ handleBet }) => {
             ))}
           </div>
 
-          <button onClick={handleBet} className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-lg font-bold text-lg transition-colors">
+          <button onClick={() => handleBet(bet1)} className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-lg font-bold text-lg transition-colors">
             Bet
             <div className="text-sm font-normal">{bet1.toFixed(2)} INR</div>
           </button>
@@ -239,7 +264,7 @@ const BettingComponent = ({ handleBet }) => {
             ))}
           </div>
 
-          <button onClick={handleBet} className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-lg font-bold text-lg transition-colors">
+          <button onClick={() => handleBet(bet2)} className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-lg font-bold text-lg transition-colors">
             Bet
             <div className="text-sm font-normal">{bet2.toFixed(2)} INR</div>
           </button>

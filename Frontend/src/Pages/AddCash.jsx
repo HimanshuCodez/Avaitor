@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Shield, Award } from "lucide-react";
 import Navbar from "../components/Navbar";
+import { Link } from "react-router-dom";
 
 const AddCash = () => {
   const [addAmount, setAddAmount] = useState("100");
@@ -17,8 +18,8 @@ const AddCash = () => {
         <Navbar />
         <main className="flex-1 flex flex-col items-center justify-center px-8 py-12 text-center">
           <div className="bg-black bg-opacity-50 p-8 rounded-lg shadow-2xl w-full max-w-md">
-            <h1 className="text-4xl font-light mb-2 tracking-wide">Add Cash</h1>
-            <p className="text-gray-300 mb-8 text-lg">Add funds to your account.</p>
+           <p className="text-gray-300 mb-8 text-lg">Add funds to your account.</p>
+<h1 className="text-4xl font-light mb-2 tracking-wide">Add Cash</h1>
             <div className="space-y-6">
               <div className="bg-white bg-opacity-10 rounded-lg py-4 px-6">
                 <label htmlFor="amount" className="block text-left text-gray-300 mb-2">Amount to Add</label>
@@ -33,12 +34,12 @@ const AddCash = () => {
                   />
                 </div>
               </div>
-              <button className="w-full bg-red-600 hover:bg-red-700 px-8 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg">
+             <Link to={"/problem"}>  <button className="w-full mb-10 bg-red-600 hover:bg-red-700 px-8 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg">
                 Add via Net Banking
-              </button>
-              <button className="w-full bg-green-600 hover:bg-green-700 px-8 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg">
+              </button></Link>
+               <Link to={"/problem"}><button className="w-full bg-green-600 hover:bg-green-700 px-8 py-4 rounded-lg text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg">
                 Add Cash
-              </button>
+              </button></Link>
             </div>
           </div>
         </main>

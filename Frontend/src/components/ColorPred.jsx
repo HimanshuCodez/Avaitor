@@ -1,26 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Wallet, Gift, Clock, Users, TrendingUp, Volume2, User } from 'lucide-react';
+import { Wallet, Gift, Clock, Users, TrendingUp, Volume2, User, XCircle } from 'lucide-react';
 import Leaderboard from './Leaderboard';
+import { Link } from 'react-router-dom';
 
 export default function ColorPredictionGame() {
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState(500);
   const [selectedAmount, setSelectedAmount] = useState(10);
   const [selectedColor, setSelectedColor] = useState(null);
-  const [timer, setTimer] = useState(180);
+  const [timer, setTimer] = useState(30);
   const [gameNumber, setGameNumber] = useState('202511041000112345');
-  const [history, setHistory] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [history, setHistory] = useState([0, 1, 8, 3, 4, 2, 6, 7, 1, 9]);
+  const [showLooseModal, setShowLooseModal] = useState(false);
+  const [showBetModal, setShowBetModal] = useState(false);
+  const [betAmount, setBetAmount] = useState('');
+  const [showRechargeModal, setShowRechargeModal] = useState(false);
+  const [numberSelectedForBet, setNumberSelectedForBet] = useState(null);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer(prev => {
         if (prev <= 1) {
-          return 180;
+          setShowLooseModal(true); // Show loose modal when timer ends
+          return 30;
         }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (showLooseModal) {
+      const looseModalTimer = setTimeout(() => {
+        setShowLooseModal(false);
+      }, 3000); // Loose modal disappears after 3 seconds
+      return () => clearTimeout(looseModalTimer);
+    }
+  }, [showLooseModal]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -40,6 +57,27 @@ export default function ColorPredictionGame() {
           setBalance(prev => prev + selectedAmount * 2);
         }
       }, 1000);
+    }
+  };
+
+  const handleNumberSelection = (num) => {
+    if (balance === 0) {
+      setShowRechargeModal(true);
+      return;
+    }
+    setNumberSelectedForBet(num);
+    setShowBetModal(true);
+  };
+
+  const handleConfirmBet = () => {
+    const amount = parseInt(betAmount, 10);
+    if (amount > 0 && amount <= balance) {
+      setBalance(prev => prev - amount);
+      setShowBetModal(false);
+      setBetAmount('');
+    } else {
+      // Optional: show an error message
+      console.error("Invalid bet amount");
     }
   };
 
@@ -63,7 +101,7 @@ export default function ColorPredictionGame() {
           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ef4444'/%3E%3Ctext x='50' y='60' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EOK%3C/text%3E%3C/svg%3E" alt="OK Win" className="w-8 h-8" />
           </div>
-          <span className="text-xl font-bold">OK.Win</span>
+          <span className="text-xl font-bold">MostBet</span>
         </div>
         <div className="flex items-center gap-3">
           <Volume2 className="w-6 h-6" />
@@ -173,8 +211,10 @@ export default function ColorPredictionGame() {
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
               <button
                 key={num}
+                onClick={() => handleNumberSelection(num)}
                 className={`${getColorClass(num)} w-full aspect-square rounded-full font-bold text-2xl hover:scale-105 transform transition flex items-center justify-center border-4 border-white
   shadow-[0_0_0_2px_rgba(255,255,255,0.5),inset_0_0_10px_rgba(255,255,255,0.3),inset_0_0_20px_rgba(0,0,0,0.2)]
+  ${numberSelectedForBet === num ? 'ring-4 ring-yellow-400' : ''}
 }`}
               >
                 {num}
@@ -238,10 +278,78 @@ export default function ColorPredictionGame() {
             <div className="text-xl font-bold">₹{balance.toFixed(2)}</div>
           </div>
         </div>
-        <button className="bg-white text-blue-600 px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transform transition">
+<Link to={"/add-cash"}> <button className="bg-white text-blue-600 px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transform transition">
           Add Cash
-        </button>
+        </button></Link>
       </div>
+
+      {/* Bet Modal */}
+      {showBetModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-xl text-center text-white w-80">
+            <p className="text-2xl font-bold mb-4">Bet on Number {numberSelectedForBet}</p>
+            <input
+              type="number"
+              value={betAmount}
+              onChange={(e) => setBetAmount(e.target.value)}
+              placeholder="Enter amount"
+              className="w-full bg-gray-700 text-white p-2 rounded mb-4"
+            />
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {[10, 100, 500, 1000].map(amount => (
+                <button
+                  key={amount}
+                  onClick={() => setBetAmount(amount.toString())}
+                  className="bg-gray-700 py-2 rounded-lg font-semibold hover:bg-pink-500"
+                >
+                  {amount}
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-around">
+              <button
+                onClick={() => setShowBetModal(false)}
+                className="bg-red-500 px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transform transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmBet}
+                className="bg-green-500 px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transform transition"
+              >
+                Confirm Bet
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Recharge Modal */}
+      {showRechargeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl text-center text-gray-900 flex flex-col items-center">
+            <p className="text-2xl font-bold mb-4">Insufficient Balance</p>
+            <p className="text-lg mb-4">Please recharge to continue playing.</p>
+            <button
+              onClick={() => setShowRechargeModal(false)} // This should ideally navigate to a recharge page
+              className="bg-green-500 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transform transition"
+            >
+              Recharge
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Loose Modal */}
+      {showLooseModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl text-center text-gray-900 flex flex-col items-center">
+            <XCircle className="w-16 h-16 text-red-500 mb-4" />
+            <p className="text-3xl font-bold mb-2">You Lose!</p>
+            <p className="text-lg">Better luck next time.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

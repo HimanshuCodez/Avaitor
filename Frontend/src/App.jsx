@@ -11,6 +11,7 @@ import Login from './Pages/Login';
 import Signup from './Pages/Signup';
 import ProtectedRoute from './components/ProtectedRoute';
 import ColorPredictionGame from './components/ColorPred';
+import ServerProblemCard from './Pages/Server';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/problem" element={<ServerProblemCard/>} />
         <Route path="/prediction" element={<ColorPredictionGame/>} />
         <Route path="/game" element={<ProtectedRoute><AviatorLayout /></ProtectedRoute>} />
       </Routes>
