@@ -73,26 +73,6 @@ export default function GamingBettingHeader() {
         </button>
       </motion.div>
 
-      {/* Top Icons Bar */}
-      <motion.div 
-        className="bg-red-600 py-2 px-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-white text-xs">
-          <div className="flex items-center space-x-4">
-            <Menu className="w-5 h-5 cursor-pointer hover:scale-110 transition-transform" />
-            <User className="w-5 h-5 cursor-pointer hover:scale-110 transition-transform" />
-            <Shield className="w-5 h-5 cursor-pointer hover:scale-110 transition-transform" />
-            <span className="font-semibold">WEBSITE ACCESS</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Globe className="w-5 h-5 cursor-pointer hover:scale-110 transition-transform" />
-            <Gift className="w-5 h-5 cursor-pointer hover:scale-110 transition-transform" />
-          </div>
-        </div>
-      </motion.div>
 
       {/* Main Header */}
       <motion.header 
